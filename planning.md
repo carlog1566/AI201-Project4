@@ -83,4 +83,45 @@ Instead, it means the evidence from both detection signals is mixed enough that 
 
 Because false positives are especially harmful on creative platforms, the uncertain range is intentionally wide. The system avoids confidently labeling content as AI-generated unless both signals strongly agree.
 
+## Transparency Labels
 
+| Result | Label Text |
+|---------|------------|
+| High-confidence AI | "Our automated review found strong evidence that this content was generated using AI. This result is based on multiple detection methods and may be appealed by the creator." |
+| Uncertain | "Our automated review could not confidently determine whether this content was human-written or AI-generated. Readers should interpret this result with caution." |
+| High-confidence Human | "Our automated review found strong evidence that this content was written by a human author." |
+
+
+## Appeals Workflow
+
+Any creator whose submission has been analyzed may submit an appeal.
+
+### Required Information
+
+- content_id
+- creator_id
+- written explanation describing why the creator believes the decision is incorrect
+
+### Appeal Process
+
+1. Locate the original submission.
+2. Store the creator's appeal reason.
+3. Change the submission status from: "classified" to "under review"
+4. Record the appeal in the structured audit log.
+5. Return confirmation that the appeal was received.
+
+No automatic re-classification occurs.
+
+## Human Reviewer View
+
+A reviewer would see:
+
+- Content ID
+- Creator ID
+- Original submission
+- Original detector scores
+- Final confidence score
+- Attribution result
+- Appeal reason
+- Timestamp
+- Current status
