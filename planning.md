@@ -71,7 +71,7 @@ The LLM is weighted more due to how it considers overall context and writing qua
 ### Confidence Thresholds
 
 | &nbsp; | &nbsp; | &nbsp; |
-|---|---|
+|--------|--------|--------|
 | 0.75 – 1.00 | Likely AI | High-confidence AI |
 | 0.45 – 0.74 | Uncertain | Uncertain |
 | 0.00 – 0.44 | Likely Human | High-confidence Human |
@@ -87,7 +87,7 @@ Because false positives are especially harmful on creative platforms, the uncert
 ## Transparency Labels
 
 | Result | Label Text |
-|---------|------------|
+|--------|------------|
 | High-confidence AI | "Our automated review found strong evidence that this content was generated using AI. This result is based on multiple detection methods and may be appealed by the creator." |
 | Uncertain | "Our automated review could not confidently determine whether this content was human-written or AI-generated. Readers should interpret this result with caution." |
 | High-confidence Human | "Our automated review found strong evidence that this content was written by a human author." |
