@@ -136,15 +136,12 @@ Poetry with repetitive wording.
 
 Poems often contain repeated phrases, simple vocabulary, and short sentences. These characteristics may cause stylometric heuristics to incorrectly classify the work as AI-generated even though it is authentic.
 
----
-
 ### Edge Case 2
 
 Professional technical documentation.
 
 Technical writing intentionally uses consistent sentence structure and repeated terminology. This uniformity may resemble AI-generated writing despite being written by humans.
 
----
 
 ### Edge Case 3
 
