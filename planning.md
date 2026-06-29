@@ -125,3 +125,81 @@ A reviewer would see:
 - Appeal reason
 - Timestamp
 - Current status
+
+
+## Anticipated Edge Cases
+
+### Edge Case 1
+
+Poetry with repetitive wording.
+
+Poems often contain repeated phrases, simple vocabulary, and short sentences. These characteristics may cause stylometric heuristics to incorrectly classify the work as AI-generated even though it is authentic.
+
+---
+
+### Edge Case 2
+
+Professional technical documentation.
+
+Technical writing intentionally uses consistent sentence structure and repeated terminology. This uniformity may resemble AI-generated writing despite being written by humans.
+
+---
+
+### Edge Case 3
+
+Human-edited AI writing.
+
+A creator could substantially edit AI-generated text until many stylometric features resemble human writing. The LLM may still detect AI characteristics, but confidence should decrease because the signals disagree.
+
+
+## Architecture
+
+```
+        CONTENT SUBMISSION FLOW
+
+              POST/submit
+                   │
+          Raw text + creator_id
+                   │
+                   ▼
+            Input Validation
+                   │
+                   ▼
+           Detection Pipeline
+          │                  │
+          ▼                  ▼
+   Groq LLM Signal     Stylometric Signal
+          │                  │
+          └────────┬─────────┘
+                   ▼
+          Confidence Scoring
+                   │
+                   ▼
+      Transparency Label Generator
+                   │
+                   ▼
+          Structured Audit Log
+                   │
+                   ▼
+           JSON API Response
+
+============================================
+
+              APPEAL FLOW
+
+              POST/appeal
+                   │
+          content_id + reason
+                   │
+                   ▼
+      Update Status → under review
+                   │
+                   ▼
+       Append Appeal to Audit Log
+                   │
+                   ▼
+          JSON Success Response
+```
+
+### Architecture Narrative
+When a creator submits text, the API validates the request before sending it through two independent detection signals. Their outputs are combined into a single confidence score, which determines the transparency label shown to users. Every decision is recorded in a structured audit log. If a creator appeals the result, the system updates the submission status to **under review**, stores the appeal reason, and records the event in the audit log.
