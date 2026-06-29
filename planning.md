@@ -63,7 +63,7 @@ Returns an AI likelihood score between 0 and 1.
 The final score is calculated using a weighted average of both detection signals.
 
 ```
-Final Score = (0.60 * LLM Score) + (0.40 * Stylometric Score)
+Final Score = (0.65 * LLM Score) + (0.35 * Stylometric Score)
 ```
 
 The LLM is weighted more due to how it considers overall context and writing quality, while the stylometric heuristics provides supporting statistical evidence based on structure.
@@ -72,9 +72,9 @@ The LLM is weighted more due to how it considers overall context and writing qua
 
 | Score | Meaning |
 |-------|--------|
-| 0.75 – 1.00 | Likely AI - High-confidence AI |
-| 0.45 – 0.74 | Uncertain |
-| 0.00 – 0.44 | High-confidence Human - Likely Human |
+| 0.65 – 1.00 | Likely AI - High-confidence AI |
+| 0.4 – 0.64 | Uncertain |
+| 0.00 – 0.39 | High-confidence Human - Likely Human |
 
 **Meaning of a Confidence Score**
 

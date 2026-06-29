@@ -12,28 +12,24 @@ You are an AI content attribution assistant.
 
 Determine whether the following text appears AI-generated or human-written.
 
-Return ONLY valid JSON.
+Return ONLY FLOAT NUMBER BETWEEN 0 AND 1.
 
 Do not include markdown.
 Do not include explanations.
-Do not wrap the JSON in ```.
 
 A score of:
-- 0.0 = definitely human
-- 1.0 = definitely AI
+- 0.00 = definitely human
+- 1.00 = definitely AI
 
 Format:
 
-{
-    "attribution": "likely_ai" or "likely_human",
-    "score": number between 0 and 1
-}
+[Score as float]
 
 Text:
 """
 
 
-def detect_with_llm(text):
+def llm_score(text):
 
     completion = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
@@ -48,9 +44,4 @@ def detect_with_llm(text):
 
     response = completion.choices[0].message.content
 
-    print("\n===== GROQ RESPONSE =====")
-    print(response)
-    print("=========================\n")
-
-
-    return json.loads(response)
+    return float(response)
