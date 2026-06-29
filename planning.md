@@ -70,7 +70,7 @@ The LLM is weighted more due to how it considers overall context and writing qua
 
 ### Confidence Thresholds
 
-| &nbsp; | &nbsp; |
+| &nbsp; | &nbsp; | &nbsp; |
 |---|---|
 | 0.75 – 1.00 | Likely AI | High-confidence AI |
 | 0.45 – 0.74 | Uncertain | Uncertain |
