@@ -2,6 +2,8 @@
 
 ## Overview
 
+**Video Walkthrough:** [Link To Video](https://www.loom.com/share/7e969bb694014b42bd12f09dc7ad4cc2)
+
 This project implements a content provenance and attribution system that classifies text as likely AI-generated, likely human-written, or uncertain. The system combines 2 detection signals and produces a calibrated confidence score used to generate transparency labels.
 
 ## Architecture Overview
