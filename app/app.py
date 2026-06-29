@@ -3,8 +3,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from llm_detector import llm_score
-from audit import add_entry, get_entries
+from audit import add_entry, get_entries, save_log
 from scoring import compute_confidence, generate_label
 
 app = Flask(__name__)
@@ -17,7 +16,7 @@ limiter = Limiter(
 )
 
 @app.route("/submit", methods=["POST"])
-@limiter.limit("10 per minute;100 per day")
+@limiter.limit("20 per minute;200 per day")
 def submit():
 
     data = request.get_json()
@@ -36,6 +35,7 @@ def submit():
         attribution = "uncertain"
 
     content_id = str(uuid4())
+    label = generate_label(raw_confidence)
 
     entry = {
         "content_id": content_id,
@@ -46,7 +46,9 @@ def submit():
         "confidence": raw_confidence,
         "llm_score": result["llm_score"],
         "stylometric_score": result["stylometric_score"],
-        "status": "classified"
+        "label": label,
+        "status": "classified",
+        "appealed": False
     }
 
     add_entry(entry)
@@ -57,7 +59,7 @@ def submit():
         "confidence": display_confidence,
         "llm_score": round(result["llm_score"], 2),
         "stylometric_score": round(result["stylometric_score"], 2),
-        "label": generate_label(raw_confidence)
+        "label": label
     }
 
 
@@ -77,24 +79,20 @@ def appeal():
 
     entries = get_entries()
 
-    updated = None
+    found = False
 
     for entry in entries:
         if entry["content_id"] == content_id:
             entry["status"] = "under_review"
+            entry["appealed"] = True
             entry["appeal_reasoning"] = reason
-            updated = entry
+            found = True
             break
 
-    if not updated:
+    if not found:
         return jsonify({"error": "content_id not found"}), 404
 
-    add_entry({
-        "type": "appeal",
-        "content_id": content_id,
-        "creator_reasoning": reason,
-        "timestamp": datetime.utcnow().isoformat()
-    })
+    save_log(entries)
 
     return jsonify({
         "message": "Appeal received",

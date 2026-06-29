@@ -10,11 +10,9 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 PROMPT = """
 You are an AI content attribution assistant.
 
-Determine whether the following text appears AI-generated or human-written.
+Determine whether the following text appears AI-generated or human-written. Be confident with your choice.
 
 Return ONLY FLOAT NUMBER BETWEEN 0 AND 1.
-
-Do not include markdown.
 Do not include explanations.
 
 A score of:
