@@ -1,14 +1,23 @@
 from uuid import uuid4
 from datetime import datetime
 from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from llm_detector import llm_score
 from audit import add_entry, get_entries
 from scoring import compute_confidence, generate_label
 
 app = Flask(__name__)
 
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[],
+    storage_uri="memory://"
+)
 
 @app.route("/submit", methods=["POST"])
+@limiter.limit("10 per minute;100 per day")
 def submit():
 
     data = request.get_json()
@@ -57,6 +66,40 @@ def log():
 
     return jsonify({
         "entries": get_entries()
+    })
+
+@app.route("/appeal", methods=["POST"])
+def appeal():
+    data = request.get_json()
+
+    content_id = data["content_id"]
+    reason = data["creator_reasoning"]
+
+    entries = get_entries()
+
+    updated = None
+
+    for entry in entries:
+        if entry["content_id"] == content_id:
+            entry["status"] = "under_review"
+            entry["appeal_reasoning"] = reason
+            updated = entry
+            break
+
+    if not updated:
+        return jsonify({"error": "content_id not found"}), 404
+
+    add_entry({
+        "type": "appeal",
+        "content_id": content_id,
+        "creator_reasoning": reason,
+        "timestamp": datetime.utcnow().isoformat()
+    })
+
+    return jsonify({
+        "message": "Appeal received",
+        "content_id": content_id,
+        "status": "under_review"
     })
 
 
