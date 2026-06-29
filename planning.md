@@ -70,11 +70,11 @@ The LLM is weighted more due to how it considers overall context and writing qua
 
 ### Confidence Thresholds
 
-| &nbsp; | &nbsp; | &nbsp; |
-|--------|--------|--------|
-| 0.75 – 1.00 | Likely AI | High-confidence AI |
-| 0.45 – 0.74 | Uncertain | Uncertain |
-| 0.00 – 0.44 | Likely Human | High-confidence Human |
+| Score | Meaning |
+|-------|--------|
+| 0.75 – 1.00 | Likely AI - High-confidence AI |
+| 0.45 – 0.74 | Uncertain |
+| 0.00 – 0.44 | High-confidence Human - Likely Human |
 
 **Meaning of a Confidence Score**
 
@@ -204,3 +204,82 @@ A creator could substantially edit AI-generated text until many stylometric feat
 
 ### Architecture Narrative
 When a creator submits text, the API validates the request before sending it through two independent detection signals. Their outputs are combined into a single confidence score, which determines the transparency label shown to users. Every decision is recorded in a structured audit log. If a creator appeals the result, the system updates the submission status to **under review**, stores the appeal reason, and records the event in the audit log.
+
+
+## AI Tool Plan
+
+### Milestone 3 – Submission Endpoint
+
+**Specification Provided**
+
+- Detection Signals section
+- Architecture diagram
+
+**AI Prompt**
+
+Generate a Flask application with:
+
+- POST /submit
+- UUID generation
+- Groq detector function
+- JSON response
+- Audit logging
+
+**Verification**
+
+- Submit several pieces of text.
+- Confirm that a unique content ID is returned.
+- Verify that the audit log contains the new entry.
+- Ensure the Groq detector returns a score between 0 and 1.
+
+### Milestone 4 – Second Detection Signal
+
+**Specification Provided**
+
+- Detection Signals
+- Confidence Scoring and Uncertainty Representation
+- Architecture Diagram
+
+**AI Prompt**
+
+Generate:
+
+- Stylometric heuristic functions
+- Confidence score calculation
+- Combined attribution logic
+
+**Verification**
+
+Test multiple examples including:
+
+- Human-written paragraph
+- AI-generated paragraph
+- Poem
+
+Confirm that scores differ meaningfully and produce different transparency labels.
+
+### Milestone 5 – Production Features
+
+**Specification Provided**
+
+- Transparency Labels
+- Appeals Workflow
+- Architecture diagram
+
+**AI Prompt**
+
+Generate:
+
+- POST /appeal
+- GET /log
+- Rate limiting
+- Audit log updates
+- Label generation
+
+**Verification**
+
+- Submit at least three pieces of content.
+- Verify that all three transparency labels can be produced.
+- Submit an appeal.
+- Confirm the status changes to under review.
+- Confirm the appeal appears in the audit log.
